@@ -1,0 +1,3 @@
+wire_id,device_type,serial_number,enabled,fw_version
+2A58C5965F1C,Charge 3,,false,APP28.20001.88.11 BSL28.0.0 PERIPH|BT_RADIO|5.7.204|0 PERIPH|TOUCH|5.1.0|0 ASSETS|1|2904
+4a28be3dd133,MobileTrack,33d13dbe284a,false,APP51.0 BSL51.0
