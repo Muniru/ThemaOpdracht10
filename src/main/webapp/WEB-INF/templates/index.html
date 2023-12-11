@@ -9,13 +9,14 @@
 </head>
 <body>
 
-
     <style>
         .my-custom-row{
             background-color: bisque;
             height: 400px;
         }
     </style>
+
+
 
     <h1>Hello, world!</h1>
     <div class="container">
@@ -43,7 +44,7 @@
 
     </div>
     <div class="container">
-        <!-- welcome message read from resource bundle welcome.html-->
+        <!-- welcome message read from resource bundle index.html-->
         <p th:text="#{welcome.msg}">Welcome Offline</p>
         <!-- date forwarded from the servlet-->
         <p>Date: <span th:text="${currentDate}">Sat Oct 24 2015</span></p>
