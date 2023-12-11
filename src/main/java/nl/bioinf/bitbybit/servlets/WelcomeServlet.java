@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-@WebServlet(name = "WelcomeServlet", urlPatterns = "/welcome", loadOnStartup = 1)
+@WebServlet(name = "WelcomeServlet", urlPatterns = "/index", loadOnStartup = 1)
 public class WelcomeServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
@@ -35,6 +35,6 @@ public class WelcomeServlet extends HttpServlet {
                 request.getLocale());
         ctx.setVariable("currentDate", new Date());
         WebConfig.createTemplateEngine(getServletContext()).
-                process("welcome", ctx, response.getWriter());
+                process("index", ctx, response.getWriter());
     }
 }
