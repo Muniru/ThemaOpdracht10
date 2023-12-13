@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-@WebServlet(name = "WelcomeServlet", urlPatterns = "/file-upload", loadOnStartup = 1)
+@WebServlet(name = "WelcomeServlet", urlPatterns = "/welcome")
 public class WelcomeServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         System.out.println("Initializing Thymeleaf template engine");
         final ServletContext servletContext = this.getServletContext();
-        WebConfig.createTemplateEngine(servletContext);
+
     }
     private static final long serialVersionUID = 1L;
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -35,6 +35,6 @@ public class WelcomeServlet extends HttpServlet {
                 request.getLocale());
         ctx.setVariable("currentDate", new Date());
         WebConfig.createTemplateEngine(getServletContext()).
-                process("file-upload", ctx, response.getWriter());
-    }
+                process("index", ctx, response.getWriter());
+   }
 }
