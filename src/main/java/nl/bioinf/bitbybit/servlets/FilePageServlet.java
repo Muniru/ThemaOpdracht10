@@ -21,7 +21,7 @@ public class FilePageServlet extends HttpServlet {
     public void init() throws ServletException {
         System.out.println("Initializing Thymeleaf template engine");
         final ServletContext servletContext = this.getServletContext();
-        this.templateEngine = WebConfig.createTemplateEngine();
+        this.templateEngine = WebConfig.createTemplateEngine(servletContext);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,9 +37,11 @@ public class FilePageServlet extends HttpServlet {
             final String watch = FileHandler.getWatchType(watchType);
             ctx.setVariable("watch_type", watchType);
             ctx.setVariable("watch_msg", watch);
+            ctx.setVariable("file_name", request.getParameter("file_form"));
         } else {
             ctx.setVariable("watch_type", "none");
             ctx.setVariable("watch_msg", "no msg");
+            ctx.setVariable("file_name", "no file");
         }
         templateEngine.process("file-upload", ctx, response.getWriter());
     }
