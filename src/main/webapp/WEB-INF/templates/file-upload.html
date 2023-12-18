@@ -38,12 +38,28 @@
     </div>
 </nav>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-2"> Col One</div>
-            <div class="col-sm-12 col-md-6 col-lg-8"> Col Two</div>
+<h1>UPLOAD PAGE</h1>
+<!-- https://getbootstrap.com/docs/5.0/forms/validation/-->
+<div class="container was-validated">
+    <form class="row" action="file-upload" method="GET">
+        <div class="col-sm-3 col-mb-6">
+            <select name="watch_category" class="form-select"  aria-label="Default select DATATYPE" required>
+                <option value="" selected>Open this select menu</option>
+                <option value="Samsung">Samsung</option>
+                <option value="Apple">Apple</option>
+                <option value="Fitbit">Fitbit</option>
+            </select>
+
+            <label for="formFileMultiple" class="form-label">Add the .zip files</label>
+            <input name="file_form" class="form-control" type="file" id="formFileMultiple" multiple required>
+
+            <button type="submit" class="btn btn-primary">Submit file</button>
         </div>
-    </div>
+    </form>
+</div>
+
+<div class="container"><h2 th:text="${watch_msg}"></h2></div>
+<div class="container"><h2 th:text="${file_name}"></h2></div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
