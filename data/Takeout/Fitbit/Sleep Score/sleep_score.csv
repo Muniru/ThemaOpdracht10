@@ -1,3 +1,0 @@
-sleep_log_entry_id,timestamp,overall_score,composition_score,revitalization_score,duration_score,deep_sleep_in_minutes,resting_heart_rate,restlessness
-43642787171,2023-11-29T07:17:30Z,69,,69,,82,59,0.11690140845070422
-43629391607,2023-11-28T07:07:30Z,71,,71,,65,57,0.08391608391608392
