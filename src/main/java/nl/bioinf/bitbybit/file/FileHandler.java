@@ -29,7 +29,7 @@ public class FileHandler {
      * @return A list of filenames that start with the specified prefix.
      * @throws IOException If an I/O error occurs during the file tree traversal.
      */
-    private static List<String> scanFilenamesStartingWith(String folderPath, String prefix) throws IOException {
+    public static List<String> scanFilenamesStartingWith(Path folderPath, String prefix) throws IOException {
         List<String> filenames = new ArrayList<>();
 
         // Define a FileVisitor to collect filenames
@@ -51,7 +51,7 @@ public class FileHandler {
         };
 
         // Walk the file tree and apply the FileVisitor
-        Files.walkFileTree(Paths.get(folderPath), fileVisitor);
+        Files.walkFileTree(folderPath, fileVisitor);
 
         return filenames;
     }

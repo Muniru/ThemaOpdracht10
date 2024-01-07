@@ -12,6 +12,11 @@ public class WatchData {
         this.stepData = new ArrayList<>();
     }
 
+    public WatchData(WatchType watchType, List<StepData> stepData){
+        this.watchType = watchType;
+        this.stepData = stepData;
+    }
+
     public void AddSteps(StepData newStepData){
         this.stepData.add(newStepData);
     }
