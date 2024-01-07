@@ -1,4 +1,4 @@
 package nl.bioinf.bitbybit.data;
 
-public record StepData(int unixTime, int steps) {
+public record StepData(long dateTime, int value) {
 }

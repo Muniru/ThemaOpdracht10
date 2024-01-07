@@ -25,11 +25,11 @@ public class WatchData {
         // Use a lambda expression and stream to filter StepData records based on the time range
         List<StepData> conditionList = this.stepData
                 .stream()
-                .filter(x -> x.unixTime() >= unixFrom && x.unixTime() <= unixTo)
+                .filter(x -> x.dateTime() >= unixFrom && x.dateTime() <= unixTo)
                 .toList();
 
-        // Check if the filtered list is empty, return 0 if true, otherwise calculate the sum of steps
-        return conditionList.isEmpty() ? 0 : conditionList.stream().mapToInt(StepData::steps).sum();
+        // Check if the filtered list is empty, return 0 if true, otherwise calculate the sum of value
+        return conditionList.isEmpty() ? 0 : conditionList.stream().mapToInt(StepData::value).sum();
     }
 
 }
