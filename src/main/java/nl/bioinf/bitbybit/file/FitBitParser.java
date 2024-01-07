@@ -28,32 +28,49 @@ public class FitBitParser implements WatchParser{
 
         return null;
     }
-    public static List<StepData> StepExtractor(String file){
+
+    /**
+     * Extracts StepData from a JSON file containing StepDataMedium objects.
+     *
+     * @param file The path to the JSON file.
+     * @return A list of StepData objects extracted from the JSON file.
+     */
+    public static List<StepData> StepExtractor(String file) {
+        // List to hold StepDataMedium objects parsed from JSON
         List<StepDataMedium> media;
+
+        // List to hold the final StepData objects
         List<StepData> stepData = new ArrayList<>();
+
+        // Gson object for JSON parsing
         Gson gson = new Gson();
 
-
-        try{
+        try {
+            // Read JSON file and parse it into a List of StepDataMedium objects
             FileReader reader = new FileReader(file);
             media = gson.fromJson(reader, new TypeToken<List<StepDataMedium>>() {}.getType());
         } catch (FileNotFoundException e) {
+            // If the file is not found, throw a runtime exception
             throw new RuntimeException(e);
         }
 
-        // Remove the 0 values
+        // Remove StepDataMedium objects with value less than or equal to 0
         media.removeIf(x -> x.value() <= 0);
 
-        for (StepDataMedium med : media){
+        // Convert StepDataMedium objects to StepData objects and add them to the result list
+        for (StepDataMedium med : media) {
+            // Parse date and time from the StepDataMedium object
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm:ss");
             LocalDateTime dateTime = LocalDateTime.parse(med.dateTime, formatter);
 
+            // Create a new StepData object and add it to the result list
             stepData.add(
                     new StepData(
                             dateTime.toEpochSecond(ZoneOffset.UTC),
                             med.value));
         }
 
+        // Return the final list of StepData objects
         return stepData;
     }
 
