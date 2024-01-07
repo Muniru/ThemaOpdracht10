@@ -21,6 +21,14 @@ public class FileHandler {
         return null;
     }
 
+  /**
+     * Scans a folder for filenames that start with the specified prefix.
+     *
+     * @param folderPath The path to the folder to scan.
+     * @param prefix     The prefix to match at the beginning of filenames.
+     * @return A list of filenames that start with the specified prefix.
+     * @throws IOException If an I/O error occurs during the file tree traversal.
+     */
     private static List<String> scanFilenamesStartingWith(String folderPath, String prefix) throws IOException {
         List<String> filenames = new ArrayList<>();
 
