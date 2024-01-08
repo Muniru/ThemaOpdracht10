@@ -1,9 +1,11 @@
+package nl.bioinf.bitbybit.file;
+
 import java.nio.file.*;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZipHandler {
+public class TestZipReader {
     public static void main(String[] args) {
         String zipFilePath = "path/to/your/file.zip";
         String tempDirectoryPath = "path/to/temp/directory";
