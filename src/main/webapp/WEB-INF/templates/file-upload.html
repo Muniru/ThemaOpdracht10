@@ -4,9 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bit by Biy</title>
+    <title>Bit by Bit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
           crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -18,8 +19,11 @@
 <body>
 <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="https://youtu.be/dQw4w9WgXcQ?si=gmANNMSIjaE85Dpi">Getting fit bit by bit</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand"
+           href="https://youtu.be/dQw4w9WgXcQ?si=gmANNMSIjaE85Dpi">Getting fit bit by bit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -28,7 +32,8 @@
                     <a class="nav-link" href="http://localhost:8080/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="http://localhost:8080/file-upload">File upload page</a>
+                    <a class="nav-link active" aria-current="page"
+                       href="http://localhost:8080/file-upload">File upload page</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="http://localhost:8080/about">About</a>
@@ -37,13 +42,14 @@
         </div>
     </div>
 </nav>
-
 <h1>UPLOAD PAGE</h1>
 <!-- https://getbootstrap.com/docs/5.0/forms/validation/-->
 <div class="container was-validated">
-    <form class="row" action="file-upload" method="GET">
+    <form th:action="@{'file-upload'}" method="post" enctype="multipart/form-data"
+          class="row" action="file-upload">
         <div class="col-sm-3 col-mb-6">
-            <select name="watch_category" class="form-select"  aria-label="Default select DATATYPE" required>
+            <select name="watch_category" class="form-select"
+                    aria-label="Default select DATATYPE" required>
                 <option value="" selected>Open this select menu</option>
                 <option value="Samsung">Samsung</option>
                 <option value="Apple">Apple</option>
@@ -51,15 +57,15 @@
             </select>
 
             <label for="formFileMultiple" class="form-label">Add the .zip files</label>
-            <input name="file_form" class="form-control" type="file" id="formFileMultiple" multiple required>
+            <input name="file_form" class="form-control" type="file"
+                   id="formFileMultiple" multiple required accept="zip">
 
             <button type="submit" class="btn btn-primary">Submit file</button>
         </div>
     </form>
 </div>
 
-<div class="container"><h2 th:text="${watch_msg}"></h2></div>
-<div class="container"><h2 th:text="${file_name}"></h2></div>
+<div class="container"><h2 th:text="${upload_directory}"></h2></div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
