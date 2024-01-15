@@ -1,15 +1,20 @@
-//package nl.bioinf.bitbybit.file;
-//
-//import java.nio.file.*;
-//import java.io.IOException;
-//import java.util.zip.ZipEntry;
-//import java.util.zip.ZipInputStream;
+package nl.bioinf.bitbybit.file;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.*;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 //
 //public class TestZipReader {
 //    public static void main(String[] args) {
-//        String zipFilePath = "path/to/your/file.zip";
-//        String tempDirectoryPath = "path/to/temp/directory";
-//
+//        String zipFilePath =
+//                "/homes/ltennapel/Documents/Thema_10/Project/ThemaOpdracht10/temp_test/samsunghealth_btnapel_20231122112365.zip";
+//        String tempDirectoryPath =
+//                "/homes/ltennapel/Documents/Thema_10/Project/ThemaOpdracht10/temp_test/Extracted/";
+////
 //        try {
 //            unzip(zipFilePath, tempDirectoryPath);
 //            System.out.println("Zip file extracted successfully to: " + tempDirectoryPath);
@@ -17,7 +22,7 @@
 //            System.err.println("Error extracting zip file: " + e.getMessage());
 //        }
 //    }
-//
+////
 //    private static void unzip(String zipFilePath, String destDirectory) throws IOException {
 //        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFilePath))) {
 //            ZipEntry entry;

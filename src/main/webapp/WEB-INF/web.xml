@@ -8,6 +8,11 @@
         <param-value>/homes/ltennapel/Documents/Thema_10/Project/ThemaOpdracht10/temp_test/</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>extracted_dir</param-name>
+        <param-value>/homes/ltennapel/Documents/Thema_10/Project/ThemaOpdracht10/temp_test/extracted/</param-value>
+    </context-param>
+
     <servlet-mapping>
         <servlet-name>FilePageServlet</servlet-name>
         <url-pattern>/file-upload</url-pattern>
@@ -22,9 +27,9 @@
         <multipart-config>
             <location>/tmp</location>
             <!-- all in bytes -->
-            <max-file-size>20848820</max-file-size>
-            <max-request-size>418018841</max-request-size>
-            <file-size-threshold>1048576</file-size-threshold>
+            <max-file-size>1000000000</max-file-size>
+            <max-request-size>1000000000</max-request-size>
+            <file-size-threshold>1000000000</file-size-threshold>
         </multipart-config>
     </servlet>
 
