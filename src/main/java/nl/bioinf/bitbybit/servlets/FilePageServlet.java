@@ -38,6 +38,7 @@ public class FilePageServlet extends HttpServlet {
             ctx.setVariable("watch_type", watchType);
             ctx.setVariable("watch_msg", watch);
             ctx.setVariable("file_name", request.getParameter("file_form"));
+            System.out.println(request.getParameter("file_form"));
         } else {
             ctx.setVariable("watch_type", "none");
             ctx.setVariable("watch_msg", "no msg");
