@@ -28,12 +28,8 @@ public class ChartDataServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         WatchParser l = new FitBitParser();
-        WatchData data = l.Parse("/homes/mawalumaru/Documents/Themas/Thema_10/ThemaOpdracht10/data/");
-        System.out.println(data.stepData.size());
 
-
-        int subset = data.GetSteps(1702214640, 1702891680);
-        System.out.println("Steps: " + subset);
+        WatchData data = l.Parse("/home/master/Documents/Hanze/Thema_10/ThemaOpdracht10/data/"); // Location of the actual root /data
 
         String json = new Gson().toJson(data);
 

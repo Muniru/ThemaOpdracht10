@@ -14,37 +14,60 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
+    // Get the canvas element with the ID 'myChart'
     const ctx = document.getElementById('myChart');
 
+    // Async function to fetch step data from the "/chartdata" endpoint
     async function getStepData() {
+        // Fetch step data from the server
         let response = await fetch("/chartdata");
         let data = await response.json();
-        let subset = data.stepData.slice(0, 10);
-        console.log(subset);
 
-        // Call functions processing step data
-        plotSteps(data.watchType, subset);
+        // Process the data to get steps by day
+        let stepDays = getStepsByDay(data);
 
+        // Plot the steps using Chart.js
+        plotSteps(data.watchType, stepDays);
     }
 
+    // Function to calculate steps by day
+    function getStepsByDay(data) {
+        let results = new Map();
+
+        // Find the minimum and maximum dates in the dataset
+        let minDate = Math.min(...data.stepData.map(steps => steps.dateTime));
+        let maxDate = Math.max(...data.stepData.map(steps => steps.dateTime));
+
+        // Fill in the map with all dates between minDate and maxDate
+        for (let currentDate = minDate; currentDate <= maxDate; currentDate += 86400000) {
+            const dateKey = new Date(currentDate).toLocaleDateString("nl-NL");
+
+            results.set(dateKey, 0);
+        }
+
+        // Update the map with values from the dataset
+        data.stepData.forEach(entry => {
+            let dateKey = new Date(entry.dateTime).toLocaleDateString("nl-NL");
+            results.set(dateKey, results.get(dateKey) + entry.value);
+        });
+
+        // Convert the Map to an array of objects
+        return Array.from(results, ([dateKey, totalValue]) => ({ dateKey, totalValue }));
+    }
+
+    // Function to plot steps using Chart.js
     function plotSteps(watchType, data) {
-        if (watchType === "FITBIT")
-            modifier = 1000;
-        else if (watchType === "SAMSUNG")
-            modifier = 1;
+        // Extract labels (dates) and steps from the data
+        let labels = data.map(steps => steps.dateKey);
+        let steps = data.map(steps => steps.totalValue);
 
-        let labels = data.map(steps => { return new Date(steps.dateTime * modifier).toLocaleDateString("nl-NL")} );
-        let steps = data.map(steps => { return steps.value} );
-
-        // all sum of all
-
+        // Create a new bar chart using Chart.js
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: '# of Votes',
+                    label: watchType.toString() + ' Steps',
                     data: steps,
                     borderWidth: 1
                 }]
@@ -59,6 +82,7 @@
         });
     }
 
+    // Call the getStepData function to initiate the data fetching and plotting
     getStepData();
 
 </script>
