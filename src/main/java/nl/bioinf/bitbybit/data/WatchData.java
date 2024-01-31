@@ -5,8 +5,8 @@ import java.util.List;
 
 public class WatchData {
 
-    private WatchType watchType;
-    private List<StepData> stepData;
+    public WatchType watchType;
+    public List<StepData> stepData;
     public WatchData(WatchType watchType){
         this.watchType = watchType;
         this.stepData = new ArrayList<>();

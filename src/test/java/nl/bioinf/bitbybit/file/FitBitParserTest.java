@@ -18,7 +18,8 @@ class FitBitParserTest {
     @Test
     void parse() {
         WatchParser l = new FitBitParser();
-        Path path = Paths.get("/home/muniru/Documents/Zorin_Hanze/Thema_10/ThemaOpdracht10/data/");
+        Path path = Paths.get(System.getProperty("user.dir"), "data");
+        System.out.println(path.toString());
         WatchData data = l.Parse(path.toString());
         System.out.println(data.GetSteps(1702214640, 1702891680));
 
@@ -26,7 +27,8 @@ class FitBitParserTest {
 
     @Test
     void stepExtractor(){
-        List<StepData> l = FitBitParser.StepExtractor("/home/muniru/Documents/Zorin_Hanze/Thema_10/ThemaOpdracht10/data/testStep.json");
+        Path path = Paths.get(System.getProperty("user.dir"), "data", "testStep.json");
+        List<StepData> l = FitBitParser.StepExtractor(path.toString());
         int sum = l.stream().mapToInt(StepData::value).sum();
         assertTrue(sum == 354);
         assertTrue(l.size() == 4);

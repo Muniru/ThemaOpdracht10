@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<H2>My chart!</H2>
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Get the canvas element with the ID 'myChart'
+    const ctx = document.getElementById('myChart');
+
+    // Async function to fetch step data from the "/chartdata" endpoint
+    async function getStepData() {
+        // Fetch step data from the server
+        let response = await fetch("/chartdata");
+        let data = await response.json();
+
+        // Process the data to get steps by day
+        let stepDays = getStepsByDay(data);
+
+        // Plot the steps using Chart.js
+        plotSteps(data.watchType, stepDays);
+    }
+
+    // Function to calculate steps by day
+    function getStepsByDay(data) {
+        let results = new Map();
+
+        // Find the minimum and maximum dates in the dataset
+        let minDate = Math.min(...data.stepData.map(steps => steps.dateTime));
+        let maxDate = Math.max(...data.stepData.map(steps => steps.dateTime));
+
+        // Fill in the map with all dates between minDate and maxDate
+        for (let currentDate = minDate; currentDate <= maxDate; currentDate += 86400000) {
+            const dateKey = new Date(currentDate).toLocaleDateString("nl-NL");
+
+            results.set(dateKey, 0);
+        }
+
+        // Update the map with values from the dataset
+        data.stepData.forEach(entry => {
+            let dateKey = new Date(entry.dateTime).toLocaleDateString("nl-NL");
+            results.set(dateKey, results.get(dateKey) + entry.value);
+        });
+
+        // Convert the Map to an array of objects
+        return Array.from(results, ([dateKey, totalValue]) => ({ dateKey, totalValue }));
+    }
+
+    // Function to plot steps using Chart.js
+    function plotSteps(watchType, data) {
+        // Extract labels (dates) and steps from the data
+        let labels = data.map(steps => steps.dateKey);
+        let steps = data.map(steps => steps.totalValue);
+
+        // Create a new bar chart using Chart.js
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: watchType.toString() + ' Steps',
+                    data: steps,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Call the getStepData function to initiate the data fetching and plotting
+    getStepData();
+
+</script>
+
+
+</body>
+</html>

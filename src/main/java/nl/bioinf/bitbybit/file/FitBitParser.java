@@ -79,7 +79,7 @@ public class FitBitParser implements WatchParser {
             LocalDateTime dateTime = LocalDateTime.parse(med.dateTime, formatter);
 
             // Create a new StepData object and add it to the result list
-            stepData.add(new StepData(dateTime.toEpochSecond(ZoneOffset.UTC), med.value));
+            stepData.add(new StepData(dateTime.toEpochSecond(ZoneOffset.UTC) * 1000, med.value));
         }
 
         // Return the final list of StepData objects
