@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletContext;
 import nl.bioinf.bitbybit.config.WebConfig;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,10 +27,12 @@ public class ChartDataServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        //WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale());
+        //ctx.getVariable("");
+        String root = this.getServletContext().getInitParameter("extracted_dir");
         WatchParser l = new FitBitParser();
 
-        WatchData data = l.Parse("/home/master/Documents/Hanze/Thema_10/ThemaOpdracht10/data/"); // Location of the actual root /data
+        WatchData data = l.Parse(root);
 
         String json = new Gson().toJson(data);
 

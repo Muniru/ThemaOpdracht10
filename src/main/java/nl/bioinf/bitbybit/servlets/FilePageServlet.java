@@ -56,7 +56,7 @@ public class FilePageServlet extends HttpServlet {
 
         //Do this only if you are sure there won't be any file name conflicts!
         //An existing one will simply be overwritten
-        String fileName;
+        String fileName = null;
         String zipFilePath = uploadDir;
 
         for (Part part : request.getParts()) {
@@ -78,7 +78,8 @@ public class FilePageServlet extends HttpServlet {
         WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale());
         ctx.setVariable("message", "upload successful, wanna do another on?");
         ctx.setVariable("Upload_directory", uploadDir );
-        templateEngine.process("file-upload", ctx, response.getWriter());
+        System.out.println(ctx.getVariable("watch_category"));
+        templateEngine.process("stepsGraph", ctx, response.getWriter());
     }
     private void unzip(String zipFilePath, String destDirectory) throws IOException {
         byte[] buffer = new byte[16384];

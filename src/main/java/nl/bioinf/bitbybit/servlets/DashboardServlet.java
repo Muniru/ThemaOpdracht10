@@ -18,6 +18,7 @@ public class DashboardServlet extends HttpServlet {
     public void init() throws ServletException {
         System.out.println("Initializing Thymeleaf template engine");
         final ServletContext servletContext = this.getServletContext();
+
         WebConfig.createTemplateEngine(servletContext);
     }
     private static final long serialVersionUID = 1L;

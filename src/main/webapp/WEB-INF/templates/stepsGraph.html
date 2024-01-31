@@ -20,7 +20,11 @@
     // Async function to fetch step data from the "/chartdata" endpoint
     async function getStepData() {
         // Fetch step data from the server
+
+        let unzip = await fetch("/unzip");
+        console.log("unzipped")
         let response = await fetch("/chartdata");
+        console.log("charted")
         let data = await response.json();
 
         // Process the data to get steps by day
