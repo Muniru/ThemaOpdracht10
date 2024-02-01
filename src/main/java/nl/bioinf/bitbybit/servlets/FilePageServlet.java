@@ -78,7 +78,8 @@ public class FilePageServlet extends HttpServlet {
         WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale());
         ctx.setVariable("message", "upload successful, wanna do another on?");
         ctx.setVariable("Upload_directory", uploadDir );
-        System.out.println(ctx.getVariable("watch_category"));
+        System.out.println(request.getParameter("watch_category"));
+        ctx.setVariable("watch_category", request.getParameter("watch_category"));
         templateEngine.process("stepsGraph", ctx, response.getWriter());
     }
     private void unzip(String zipFilePath, String destDirectory) throws IOException {
