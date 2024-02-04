@@ -38,7 +38,7 @@ public class ChartDataServlet extends HttpServlet {
         WatchType myWatchType = FileHandler.GetWatchTypeFromFile(uploadDir, "null");
         WatchParser l = null;
         switch (myWatchType) {
-            case NONE -> {
+            case NONE, APPLE -> {
                 l = null;
             }
             case FITBIT -> {
@@ -46,9 +46,6 @@ public class ChartDataServlet extends HttpServlet {
             }
             case SAMSUNG -> {
                 l = new SamsungParser();
-            }
-            case APPLE -> {
-                l = null;
             }
 
         }
