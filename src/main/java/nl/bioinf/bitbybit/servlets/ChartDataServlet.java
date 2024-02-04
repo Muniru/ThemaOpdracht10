@@ -65,5 +65,9 @@ public class ChartDataServlet extends HttpServlet {
 
         // Write JSON response to the client
         response.getWriter().write(json);
+
+        // Removes the files from the upload directory and the extracted directory
+        FileHandler.removeFilesAndDirectories(uploadDir);
+        FileHandler.removeFilesAndDirectories(root);
     }
 }

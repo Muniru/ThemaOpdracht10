@@ -27,5 +27,6 @@ public class UnzipServlet extends HttpServlet {
 
         // Unzip the files from the upload directory to the extracted directory
         FileHandler.unzip(uploadDir, extractedDir);
+
     }
 }

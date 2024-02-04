@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -160,5 +161,35 @@ public class FileHandler {
         Files.walkFileTree(folderPath, fileVisitor);
 
         return filenames;
+    }
+
+    // Metod to delete files and directories in from a root folder
+    public static void removeFilesAndDirectories(String directoryPath) throws IOException {
+        Path directory = Paths.get(directoryPath);
+
+        // Walk through the directory and delete each file and subdirectory
+        Files.walkFileTree(directory, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE,
+                new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                        // Handle the case where file visit failed (optional)
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                        // Check if the directory being visited is not the top directory
+                        if (!dir.equals(directory)) {
+                            Files.delete(dir);
+                        }
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
     }
 }
