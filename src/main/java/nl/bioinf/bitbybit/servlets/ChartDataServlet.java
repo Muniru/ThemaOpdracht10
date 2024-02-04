@@ -9,60 +9,61 @@ import nl.bioinf.bitbybit.file.SamsungParser;
 import nl.bioinf.bitbybit.file.WatchParser;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletContext;
-import nl.bioinf.bitbybit.config.WebConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
+
 
 @WebServlet(name = "ChartDataServlet", urlPatterns = "/chartdata")
 public class ChartDataServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Set response content type
         response.setContentType("text/html;charset=UTF-8");
 
+        // Get parameters from the servlet context
         String root = this.getServletContext().getInitParameter("extracted_dir");
         String uploadDir = this.getServletContext().getInitParameter("upload_dir");
 
-        WatchType myWatchType = FileHandler.GetWatchTypeFromFile(uploadDir, "null");
-        WatchParser l = null;
+        // Determine the watch type based on the file content
+        WatchType myWatchType = FileHandler.getWatchTypeFromFile(uploadDir, "null");
+        WatchParser watchParser = null;
+
+        // Initialize the appropriate watch parser based on the watch type
         switch (myWatchType) {
             case NONE, APPLE -> {
-                l = null;
+                // Do nothing for unsupported watch types
             }
             case FITBIT -> {
-                l = new FitBitParser();
+                watchParser = new FitBitParser();
             }
             case SAMSUNG -> {
-                l = new SamsungParser();
+                watchParser = new SamsungParser();
             }
-
         }
 
         WatchData data = null;
         try {
-            data = l.Parse(root);
-        }catch (Exception e ) {
-            System.out.println(e);
+            // Parse the watch data using the selected parser
+            if (watchParser != null) {
+                data = watchParser.Parse(root);
+            }
+        } catch (Exception e) {
+            // Handle parsing exceptions
+            System.err.println(e);
         }
 
+        // Convert watch data to JSON format
         String json = new Gson().toJson(data);
 
-        // Return results as JSON
+        // Set response content type for JSONs
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
+        // Write JSON response to the client
         response.getWriter().write(json);
     }
-
 }

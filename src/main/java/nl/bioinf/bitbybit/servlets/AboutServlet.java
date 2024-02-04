@@ -1,5 +1,5 @@
 package nl.bioinf.bitbybit.servlets;
-import nl.bioinf.bitbybit.config.WebConfig; //change to your situation!
+import nl.bioinf.bitbybit.config.WebConfig;
 import org.thymeleaf.context.WebContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+
 @WebServlet(name = "AboutServlet", urlPatterns = "/about", loadOnStartup = 1)
 public class AboutServlet extends HttpServlet {
     @Override
@@ -33,7 +33,6 @@ public class AboutServlet extends HttpServlet {
                 response,
                 request.getServletContext(),
                 request.getLocale());
-        ctx.setVariable("currentDate", new Date());
         WebConfig.createTemplateEngine(getServletContext()).
                 process("about", ctx, response.getWriter());
     }

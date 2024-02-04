@@ -30,32 +30,28 @@ public class FilePageServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        // Initialize Thymeleaf template engine and get upload and extracted directories
         final ServletContext servletContext = this.getServletContext();
         this.templateEngine = WebConfig.createTemplateEngine(servletContext);
         this.uploadDir = servletContext.getInitParameter("upload_dir");
         this.extractedDir = servletContext.getInitParameter("extracted_dir");
-
-        //or, use relative to this app:
-        // gets absolute path of the web application
-        //String applicationPath = getServletContext().getRealPath("");
-        //String uploadFilePath = applicationPath + File.separator + uploadDir;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //simply go back to upload form
+        // Display the file upload form
         WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale());
         templateEngine.process("file-upload", ctx, response.getWriter());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Ensure the upload directory exists
         File fileSaveDir = new File(this.uploadDir);
-        if (! fileSaveDir.exists()) {
+        if (!fileSaveDir.exists()) {
             throw new IllegalStateException("Upload dir does not exist: " + this.uploadDir);
         }
 
-        //Do this only if you are sure there won't be any file name conflicts!
-        //An existing one will simply be overwritten
+        // Process each part of the multipart request
         String fileName = null;
         String zipFilePath = uploadDir;
 
@@ -65,24 +61,24 @@ public class FilePageServlet extends HttpServlet {
                 zipFilePath += fileName;
             part.write(this.uploadDir + File.separator + fileName);
         }
-        try {
-            unzip(zipFilePath, extractedDir);
 
-            System.out.println("Zip file extracted successfully to: " + extractedDir);
+        try {
+            // Unzip the uploaded file to the specified destination directory
+            unzip(zipFilePath, extractedDir);
         } catch (IOException e) {
             System.err.println("Error extracting zip file: " + e.getMessage());
         }
 
-
-        //go back to the upload form
+        // Display a success message and go back to the upload form
         WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale());
-        ctx.setVariable("message", "upload successful, wanna do another on?");
-        ctx.setVariable("Upload_directory", uploadDir );
-        System.out.println(request.getParameter("watch_category"));
+        ctx.setVariable("message", "Upload successful. Want to upload another file?");
+        ctx.setVariable("Upload_directory", uploadDir);
         ctx.setVariable("watch_category", request.getParameter("watch_category"));
         templateEngine.process("stepsGraph", ctx, response.getWriter());
     }
+
     private void unzip(String zipFilePath, String destDirectory) throws IOException {
+        // Unzip the provided zip file to the specified destination directory
         byte[] buffer = new byte[16384];
 
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFilePath))) {
@@ -98,6 +94,4 @@ public class FilePageServlet extends HttpServlet {
             }
         }
     }
-
 }
-

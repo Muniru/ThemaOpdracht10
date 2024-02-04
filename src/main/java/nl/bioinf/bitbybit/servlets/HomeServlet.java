@@ -1,5 +1,5 @@
 package nl.bioinf.bitbybit.servlets;
-import nl.bioinf.bitbybit.config.WebConfig; //change to your situation!
+import nl.bioinf.bitbybit.config.WebConfig;
 import org.thymeleaf.context.WebContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

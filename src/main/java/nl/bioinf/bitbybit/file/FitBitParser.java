@@ -30,7 +30,7 @@ public class FitBitParser implements WatchParser {
 
         try {
             // Scan filenames starting with "steps" in the specified path
-            List<String> stepFiles = FileHandler.ScanFilenamesStartingWith(stepPath, "steps");
+            List<String> stepFiles = FileHandler.scanFilenamesStartingWith(stepPath, "steps");
             // Extract StepData from each file and add to the stepDataList
             for (String s : stepFiles) {
                 stepDataList.addAll(StepExtractor(Paths.get(stepPath.toString(), s).toString()));

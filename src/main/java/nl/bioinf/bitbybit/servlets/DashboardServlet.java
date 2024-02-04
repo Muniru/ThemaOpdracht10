@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dash", loadOnStartup = 1)
 public class DashboardServlet extends HttpServlet {
@@ -18,7 +18,6 @@ public class DashboardServlet extends HttpServlet {
     public void init() throws ServletException {
         System.out.println("Initializing Thymeleaf template engine");
         final ServletContext servletContext = this.getServletContext();
-
         WebConfig.createTemplateEngine(servletContext);
     }
     private static final long serialVersionUID = 1L;
@@ -37,7 +36,6 @@ public class DashboardServlet extends HttpServlet {
                 response,
                 request.getServletContext(),
                 request.getLocale());
-        ctx.setVariable("currentDate", new Date());
         WebConfig.createTemplateEngine(getServletContext()).
                 process("stepsGraph", ctx, response.getWriter());
     }
