@@ -8,89 +8,159 @@
 
 <H2>My chart!</H2>
 <div>
-    <canvas id="myChart"></canvas>
+    <!-- Canvas element for the weekly chart -->
+    <canvas id="weekChart" width="400" height="200"></canvas>
+    <!-- Buttons to navigate to the previous and next weeks -->
+    <button onclick="previousWeek()"><--</button>
+    <!-- Dropdown menu to select the week -->
+    <select id="weekSelector"></select>
+    <button onclick="nextWeek()">--></button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // Get the canvas element with the ID 'myChart'
-    const ctx = document.getElementById('myChart');
+    // Get the canvas element for the  chart
+    const ctxWeek = document.getElementById('weekChart');
+    // Variables to store step data and weekly data
+    let stepData;
+    let weekData;
+    let currentWeekIndex = 0;
 
-    // Async function to fetch step data from the "/chartdata" endpoint
+    // Asynchronous function to fetch step data from the server
     async function getStepData() {
         // Fetch step data from the server
-
         let unzip = await fetch("/unzip");
-        console.log("unzipped")
         let response = await fetch("/chartdata");
-        console.log("charted")
-        let data = await response.json();
+        stepData = await response.json();
 
-        // Process the data to get steps by day
-        let stepDays = getStepsByDay(data);
-
-        // Plot the steps using Chart.js
-        plotSteps(data.watchType, stepDays);
+        // Process step data to get steps by week
+        weekData = getStepsByWeek(stepData);
+        // Resize weekly data to fit into groups of 7 days
+        weekData = reSize(weekData, 7);
+        // Populate the dropdown menu with available weeks
+        populateWeekDropdown();
+        // Update the chart with the initial data
+        updateChart();
     }
 
-    // Function to calculate steps by day
-    function getStepsByDay(data) {
+    // Function to calculate steps by week
+    function getStepsByWeek(data) {
         let results = new Map();
-
-        // Find the minimum and maximum dates in the dataset
+        let dayLen = 86400000;
         let minDate = Math.min(...data.stepData.map(steps => steps.dateTime));
+        minDate -= new Date(minDate).getDay() * dayLen;
         let maxDate = Math.max(...data.stepData.map(steps => steps.dateTime));
+        maxDate +=  (6 - new Date(maxDate).getDay())  * dayLen;
 
-        // Fill in the map with all dates between minDate and maxDate
-        for (let currentDate = minDate; currentDate <= maxDate; currentDate += 86400000) {
+        // Loop through each day in the week
+        for (let currentDate = minDate; currentDate <= maxDate; currentDate += dayLen) {
             const dateKey = new Date(currentDate).toLocaleDateString("nl-NL");
-
             results.set(dateKey, 0);
         }
 
-        // Update the map with values from the dataset
+        // Update weekly data with values from the step data
         data.stepData.forEach(entry => {
             let dateKey = new Date(entry.dateTime).toLocaleDateString("nl-NL");
             results.set(dateKey, results.get(dateKey) + entry.value);
         });
 
-        // Convert the Map to an array of objects
+        // Convert Map to an array of objects
         return Array.from(results, ([dateKey, totalValue]) => ({ dateKey, totalValue }));
     }
 
-    // Function to plot steps using Chart.js
-    function plotSteps(watchType, data) {
-        // Extract labels (dates) and steps from the data
-        let labels = data.map(steps => steps.dateKey);
-        let steps = data.map(steps => steps.totalValue);
+    // Function to resize data into groups of a specified size
+    function reSize(data, stepSize){
+        let newData = []
+        for (let i = 0; i < data.length; i+= stepSize) {
+            newData.push(data.slice(i, i + stepSize))
+        }
+        return newData
+    }
 
-        // Create a new bar chart using Chart.js
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: watchType.toString() + ' Steps',
-                    data: steps,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+    // Function to populate the dropdown menu with available weeks
+    function populateWeekDropdown() {
+        const dropdown = document.getElementById('weekSelector');
+        dropdown.innerHTML = '';
+        weekData.forEach((week, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.text = week[0]["dateKey"];
+            dropdown.appendChild(option);
         });
     }
 
-    // Call the getStepData function to initiate the data fetching and plotting
+    // Function to update the dropdown menu's selected index
+    function updateDropdownIndex(){
+        const dropdown = document.getElementById('weekSelector');
+        dropdown.selectedIndex = currentWeekIndex;
+    }
+
+    // Function to update the chart with the data for the selected week
+    function updateChart(){
+        stepWeekChart.data.datasets[0].data = weekData[currentWeekIndex];
+
+        let labels = weekData[currentWeekIndex].map(steps => steps.dateKey);
+        stepWeekChart.data.labels = labels;
+
+        let steps = weekData[currentWeekIndex].map(steps => steps.totalValue);
+        stepWeekChart.data.datasets[0].data = steps;
+
+        // Update the dropdown menu's selected index
+        updateDropdownIndex();
+
+        // Update the chart
+        stepWeekChart.update();
+    }
+
+    // Function to navigate to the previous week
+    function previousWeek(){
+        if (currentWeekIndex > 0 ){
+            currentWeekIndex--;
+            updateChart();
+        }
+    }
+
+    // Function to navigate to the next week
+    function nextWeek(){
+        if (currentWeekIndex < weekData.length -1 ){
+            currentWeekIndex++;
+            updateChart();
+        }
+    }
+
+    // Event listener for the dropdown menu's change event
+    document.getElementById('weekSelector').addEventListener('change', function() {
+        currentWeekIndex = parseInt(this.value);
+        updateChart();
+    });
+
+    // Create a new Chart.js chart for the weekly chart
+    const stepWeekChart = new Chart(ctxWeek, {
+        type: "bar",
+        data:{
+            labels:["Sun","Mon","Tue","Wen","Thu","Fri","Sat"],
+            datasets: [{
+                label: "Step Count",
+                data:[0,0,0,0,0,0,0],
+                borderColor: 'blue',
+                borderWidth: 1,
+                fill: false,
+            }]
+        },
+        options: {
+            scales: {
+                y:{
+                    beginAtZero: true,
+                }
+            }
+        }
+    });
+
+    // Call the getStepData function to fetch and display the initial data
     getStepData();
 
 </script>
-
 
 </body>
 </html>
