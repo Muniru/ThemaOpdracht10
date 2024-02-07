@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<H2>My chart!</H2>
+<H2>Chart!</H2>
 <div>
     <!-- Canvas element for the weekly chart -->
     <canvas id="weekChart" width="400" height="200"></canvas>
@@ -27,6 +27,9 @@
     let weekData;
     let currentWeekIndex = 0;
 
+    let monthData;
+    let monthIndex = 0;
+
     // Asynchronous function to fetch step data from the server
     async function getStepData() {
         // Fetch step data from the server
@@ -41,7 +44,31 @@
         // Populate the dropdown menu with available weeks
         populateWeekDropdown();
         // Update the chart with the initial data
-        updateChart();
+        updateWeekChart();
+        console.log(getStepsByWeek(stepData));
+        console.log(getStepsByMonth(stepData));
+    }
+
+    function getStepsByMonth(data){
+        let steps = new Map();
+        let mindate = Math.min(...data.stepData.map(steps => steps.dateTime));
+        let minYear = new Date(mindate).getFullYear();
+        let maxDate = Math.max(...data.stepData.map(steps => steps.dateTime));
+        let maxYear = new Date(maxDate).getFullYear();
+
+        for (let year = minYear; year < maxYear + 1; year++) {
+            steps.set(year, {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0});
+        }
+
+        
+        data.stepData.forEach(entry=>{
+            let date = new Date(entry.dateTime);
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            console.log(steps.get(year)[month])
+            //steps.get(year)[month] += entry.value;
+        })
+        return Array.from(steps, ([key, value]) => ({ key: key, value: value }));
     }
 
     // Function to calculate steps by week
@@ -97,7 +124,7 @@
     }
 
     // Function to update the chart with the data for the selected week
-    function updateChart(){
+    function updateWeekChart(){
         stepWeekChart.data.datasets[0].data = weekData[currentWeekIndex];
 
         let labels = weekData[currentWeekIndex].map(steps => steps.dateKey);
@@ -117,7 +144,7 @@
     function previousWeek(){
         if (currentWeekIndex > 0 ){
             currentWeekIndex--;
-            updateChart();
+            updateWeekChart();
         }
     }
 
@@ -125,14 +152,14 @@
     function nextWeek(){
         if (currentWeekIndex < weekData.length -1 ){
             currentWeekIndex++;
-            updateChart();
+            updateWeekChart();
         }
     }
 
     // Event listener for the dropdown menu's change event
     document.getElementById('weekSelector').addEventListener('change', function() {
         currentWeekIndex = parseInt(this.value);
-        updateChart();
+        updateWeekChart();
     });
 
     // Create a new Chart.js chart for the weekly chart
