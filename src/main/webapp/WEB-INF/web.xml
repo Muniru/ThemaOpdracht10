@@ -5,12 +5,12 @@
          version="4.0">
     <context-param>
         <param-name>upload_dir</param-name>
-        <param-value>C:\Users\btnap\OneDrive - Hanzehogeschool Groningen\Documents\School\Thema_10\ThemaOpdracht10\temp_test\</param-value>
+        <param-value>/homes/ltennapel/Documents/Thema_10/Project/ThemaOpdracht10/temp_test/</param-value>
     </context-param>
 
     <context-param>
         <param-name>extracted_dir</param-name>
-        <param-value>C:\Users\btnap\OneDrive - Hanzehogeschool Groningen\Documents\School\Thema_10\ThemaOpdracht10\temp_test\extracted\</param-value>
+        <param-value>/homes/ltennapel/Documents/Thema_10/Project/ThemaOpdracht10/temp_test/extracted/</param-value>
     </context-param>
     
     <servlet-mapping>
